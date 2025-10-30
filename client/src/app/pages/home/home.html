@@ -1,1 +1,76 @@
-<p>home works!</p>
+<p-toast></p-toast>
+
+<div class="flex flex-column h-screen surface-200">
+  <!-- Toolbar superiore -->
+  <p-toolbar class="surface-100 shadow-2">
+    <div class="flex align-items-center gap-2">
+      <i class="pi pi-music text-2xl text-primary"></i>
+      <span class="text-xl font-semibold">Canzoniere</span>
+    </div>
+
+    <div class="ml-auto flex gap-2">
+      <!-- Pulsante per aprire la modale -->
+      <p-button icon="pi pi-save" label="Salva" (onClick)="openDialog()"></p-button>
+
+      <!-- 🔽 Pulsante per scaricare il PDF -->
+      <p-button
+        icon="pi pi-download"
+        label="Download PDF"
+        severity="success"
+        (onClick)="downloadPDF()"
+      ></p-button>
+    </div>
+  </p-toolbar>
+
+  <!-- Area contenuto: foglio A4 -->
+  <div class="flex flex-auto justify-content-center align-items-start overflow-auto p-5">
+    <p-card
+      class="w-full md:w-7 lg:w-6 surface-0 p-6 border-round-lg shadow-3"
+      [style]="{ minHeight: '29.7cm', maxWidth: '21cm' }"
+    >
+      <div class="flex flex-column gap-3">
+        <div class="text-center">
+          <h2 class="m-0 text-2xl font-bold">{{ title || 'Titolo della canzone' }}</h2>
+          <p class="m-0 text-500">{{ author || 'Autore' }}</p>
+        </div>
+        <div [innerHTML]="text || '<p><em>Testo della canzone...</em></p>'"></div>
+      </div>
+    </p-card>
+  </div>
+
+  <!-- Modale per salvataggio -->
+  <p-dialog
+    header="Salva Canzone"
+    [(visible)]="visible"
+    [modal]="true"
+    [closable]="true"
+    [style]="{ width: '30rem' }"
+  >
+    <div class="flex flex-column gap-3">
+      <div class="flex flex-column gap-2">
+        <label for="title">Titolo</label>
+        <input id="title" pInputText [(ngModel)]="title" class="w-full" />
+      </div>
+
+      <div class="flex flex-column gap-2">
+        <label for="author">Autore</label>
+        <input id="author" pInputText [(ngModel)]="author" class="w-full" />
+      </div>
+
+      <div class="flex flex-column gap-2">
+        <label for="text">Testo</label>
+        <p-editor
+          id="text"
+          [(ngModel)]="text"
+          styleClass="w-full border-round-lg"
+          [style]="{ height: '20rem' }"
+        ></p-editor>
+      </div>
+
+      <div class="flex justify-content-end gap-2 mt-2">
+        <p-button label="Annulla" severity="secondary" (onClick)="visible = false" />
+        <p-button label="Salva" icon="pi pi-check" (onClick)="saveSong()" />
+      </div>
+    </div>
+  </p-dialog>
+</div>
