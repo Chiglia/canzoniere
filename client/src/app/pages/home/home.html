@@ -24,26 +24,26 @@
 
   <!-- Area contenuto: foglio A4 -->
   <div class="flex flex-auto justify-content-center align-items-start overflow-auto p-5">
-    <p-card
-      class="w-full md:w-7 lg:w-6 surface-0 p-6 border-round-lg shadow-3"
+    <div
+      class="w-full md:w-7 lg:w-6 p-5 shadow-3 surface-card"
       [style]="{ minHeight: '29.7cm', maxWidth: '21cm' }"
     >
-      <div class="flex flex-column gap-3">
-        <div class="text-center">
-          <h2 class="m-0 text-2xl font-bold">{{ title || 'Titolo della canzone' }}</h2>
-          <p class="m-0 text-500">{{ author || 'Autore' }}</p>
-        </div>
+      <div class="flex w-6 p-3 flex-column gap-3">
+        <h2 class="m-0 text-2xl capitalize text-center">
+          <span class="font-bold">{{ title || 'Titolo della canzone' }}</span> -
+          <span class="font-normal font-italic">{{ author || 'Autore' }}</span>
+        </h2>
         <div
           [innerHTML]="text || '<p><em>Testo della canzone...</em></p>'"
           style="word-wrap: break-word"
         ></div>
       </div>
-    </p-card>
+    </div>
   </div>
 
   <!-- Modale per salvataggio -->
   <p-dialog
-    header="Salva Canzone"
+    header="Aggiungi Canzone"
     [(visible)]="visible"
     [modal]="true"
     [closable]="true"
