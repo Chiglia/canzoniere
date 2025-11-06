@@ -10,7 +10,7 @@
 
     <div class="ml-auto flex gap-2">
       <!-- Pulsante per aprire la modale -->
-      <p-button icon="pi pi-save" label="Salva" (onClick)="openDialog()"></p-button>
+      <p-button icon="pi pi-plus" label="Aggiungi Canzone" (onClick)="openDialog()"></p-button>
 
       <!-- 🔽 Pulsante per scaricare il PDF -->
       <p-button
@@ -33,7 +33,10 @@
           <h2 class="m-0 text-2xl font-bold">{{ title || 'Titolo della canzone' }}</h2>
           <p class="m-0 text-500">{{ author || 'Autore' }}</p>
         </div>
-        <div [innerHTML]="text || '<p><em>Testo della canzone...</em></p>'"></div>
+        <div
+          [innerHTML]="text || '<p><em>Testo della canzone...</em></p>'"
+          style="word-wrap: break-word"
+        ></div>
       </div>
     </p-card>
   </div>
