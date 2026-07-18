@@ -1,0 +1,494 @@
+<div class="w-full flex flex-col lg:flex-row flex-1 overflow-hidden h-full">
+  <!-- LEFT CONFIG PANEL (Hidden on Print) -->
+  <section
+    class="no-print w-full lg:w-80 xl:w-96 bg-white border-r border-stone-200/80 flex flex-col flex-shrink-0 p-5 space-y-5 overflow-y-auto max-h-[100vh-80px]"
+  >
+    <div>
+      <h2 class="text-lg font-bold text-stone-900 font-serif mb-1">
+        {{ 'app.booklet_settings' | transloco }}
+      </h2>
+      <p class="text-xs text-stone-500 font-medium">
+        Personalizza l'impaginazione del tuo libretto A5 stampabile.
+      </p>
+    </div>
+
+    <div class="space-y-4 border-t border-b border-stone-100 py-4">
+      <!-- Book Title -->
+      <div>
+        <label class="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-1.5">
+          {{ 'app.book_title' | transloco }}
+        </label>
+        <input
+          type="text"
+          [(ngModel)]="service.bookSettings.title"
+          class="w-full px-3 py-1.5 border border-stone-200 rounded-lg text-xs font-medium text-stone-900 focus:outline-hidden focus:border-rose-500 bg-stone-50/20"
+        />
+      </div>
+
+      <!-- Book Subtitle -->
+      <div>
+        <label class="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-1.5">
+          {{ 'app.book_subtitle' | transloco }}
+        </label>
+        <input
+          type="text"
+          [(ngModel)]="service.bookSettings.subtitle"
+          class="w-full px-3 py-1.5 border border-stone-200 rounded-lg text-xs font-medium text-stone-900 focus:outline-hidden focus:border-rose-500 bg-stone-50/20"
+        />
+      </div>
+
+      <!-- Book Author -->
+      <div>
+        <label class="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-1.5">
+          {{ 'app.book_author' | transloco }}
+        </label>
+        <input
+          type="text"
+          [(ngModel)]="service.bookSettings.author"
+          class="w-full px-3 py-1.5 border border-stone-200 rounded-lg text-xs font-medium text-stone-900 focus:outline-hidden focus:border-rose-500 bg-stone-50/20"
+        />
+      </div>
+
+      <!-- Cover Art Style selector -->
+      <div>
+        <label class="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-1.5">
+          {{ 'app.cover_style' | transloco }}
+        </label>
+        <select
+          [(ngModel)]="service.bookSettings.coverStyle"
+          class="w-full px-3 py-1.5 border border-stone-200 rounded-lg text-xs font-medium text-stone-900 focus:outline-hidden focus:border-rose-500 bg-stone-50/20"
+        >
+          <option value="classic">{{ 'app.cover_classic' | transloco }}</option>
+          <option value="modern">{{ 'app.cover_modern' | transloco }}</option>
+          <option value="vintage">{{ 'app.cover_vintage' | transloco }}</option>
+        </select>
+      </div>
+
+      <!-- Density (Font Size) -->
+      <div>
+        <label class="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-1.5">
+          Dimensione Testo Testi
+        </label>
+        <div class="flex gap-1.5 bg-stone-100 p-0.5 rounded-lg border border-stone-200/50">
+          <button
+            *ngFor="let size of service.fontSizes"
+            (click)="service.bookSettings.fontSize = size"
+            [class.bg-white]="service.bookSettings.fontSize === size"
+            [class.text-stone-900]="service.bookSettings.fontSize === size"
+            [class.font-bold]="service.bookSettings.fontSize === size"
+            class="flex-1 text-[10px] py-1 text-center rounded-md text-stone-600 transition-all cursor-pointer"
+          >
+            {{ size | uppercase }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Layout mode selection -->
+      <div>
+        <label class="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-1.5">
+          Disposizione Canzoni
+        </label>
+        <div class="flex gap-1.5 bg-stone-100 p-0.5 rounded-lg border border-stone-200/50">
+          <button
+            (click)="service.bookSettings.layoutMode = 'continuous'"
+            [class.bg-white]="service.bookSettings.layoutMode === 'continuous'"
+            [class.text-stone-900]="service.bookSettings.layoutMode === 'continuous'"
+            [class.font-bold]="service.bookSettings.layoutMode === 'continuous'"
+            class="flex-1 text-[10px] py-1 text-center rounded-md text-stone-600 transition-all cursor-pointer"
+          >
+            Compatto (Flusso)
+          </button>
+          <button
+            (click)="service.bookSettings.layoutMode = 'one-per-page'"
+            [class.bg-white]="service.bookSettings.layoutMode === 'one-per-page'"
+            [class.text-stone-900]="service.bookSettings.layoutMode === 'one-per-page'"
+            [class.font-bold]="service.bookSettings.layoutMode === 'one-per-page'"
+            class="flex-1 text-[10px] py-1 text-center rounded-md text-stone-600 transition-all cursor-pointer"
+          >
+            1 per Pagina
+          </button>
+        </div>
+      </div>
+
+      <!-- Booklet column setting -->
+      <div>
+        <label class="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-1.5">
+          Colonne di Testo (In Canzone)
+        </label>
+        <div class="flex gap-1.5 bg-stone-100 p-0.5 rounded-lg border border-stone-200/50">
+          <button
+            (click)="service.bookSettings.columns = '1'"
+            [class.bg-white]="service.bookSettings.columns === '1'"
+            [class.text-stone-900]="service.bookSettings.columns === '1'"
+            [class.font-bold]="service.bookSettings.columns === '1'"
+            class="flex-1 text-[10px] py-1 text-center rounded-md text-stone-600 transition-all cursor-pointer"
+          >
+            1 Colonna
+          </button>
+          <button
+            (click)="service.bookSettings.columns = '2'"
+            [class.bg-white]="service.bookSettings.columns === '2'"
+            [class.text-stone-900]="service.bookSettings.columns === '2'"
+            [class.font-bold]="service.bookSettings.columns === '2'"
+            class="flex-1 text-[10px] py-1 text-center rounded-md text-stone-600 transition-all cursor-pointer"
+          >
+            2 Colonne
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dynamic Global Transposition Shift -->
+    <div class="space-y-3 bg-rose-50/20 p-4 border border-rose-100 rounded-xl">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-bold text-stone-700 uppercase tracking-wider">
+          Trasposizione Libretto
+        </span>
+        <span
+          class="text-xs font-mono font-black text-rose-700 bg-white border border-rose-100 px-2 py-0.5 rounded-md"
+        >
+          {{ service.globalTranspose >= 0 ? '+' : '' }}{{ service.globalTranspose }}
+        </span>
+      </div>
+      <p class="text-[10px] text-stone-500">
+        Traspone temporaneamente gli accordi di tutto il libretto per la stampa!
+      </p>
+      <div class="flex gap-2">
+        <button
+          (click)="service.adjustGlobalTranspose(-1)"
+          class="flex-1 bg-white hover:bg-stone-50 border border-stone-200 hover:border-stone-400 text-stone-700 font-bold py-1 px-3 text-xs rounded-md cursor-pointer transition-all"
+        >
+          -1 Semitono
+        </button>
+        <button
+          (click)="service.adjustGlobalTranspose(1)"
+          class="flex-1 bg-white hover:bg-stone-50 border border-stone-200 hover:border-stone-400 text-stone-700 font-bold py-1 px-3 text-xs rounded-md cursor-pointer transition-all"
+        >
+          +1 Semitono
+        </button>
+        <button
+          *ngIf="service.globalTranspose !== 0"
+          (click)="service.resetGlobalTranspose()"
+          class="bg-stone-100 hover:bg-stone-200 text-stone-600 px-2 rounded-md text-xs cursor-pointer"
+        >
+          <i class="pi pi-refresh"></i>
+        </button>
+      </div>
+
+      <div class="flex items-center gap-1.5 pt-1">
+        <span class="text-[10px] font-bold text-stone-500 uppercase">Lingua Libretto:</span>
+        <button
+          (click)="service.toggleGlobalNotation()"
+          class="text-[10px] font-bold text-rose-700 hover:underline cursor-pointer"
+        >
+          {{ service.globalNotation === 'it' ? 'Italiana (Do...)' : 'Internazionale (C...)' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- STAMPA BOTTONE -->
+    <button
+      (click)="service.printBooklet()"
+      class="w-full bg-rose-700 hover:bg-rose-800 text-white font-bold py-3 px-4 rounded-xl text-sm shadow-md shadow-rose-900/10 transition-colors cursor-pointer inline-flex items-center justify-center gap-2"
+    >
+      <i class="pi pi-print text-lg"></i>
+      {{ 'app.print' | transloco }}
+    </button>
+  </section>
+
+  <!-- RIGHT PANEL: INTERACTIVE BOOKLET PREVIEW -->
+  <section
+    class="flex-1 bg-stone-700/80 p-6 md:p-8 lg:p-10 overflow-y-auto flex justify-center max-h-[calc(100vh-80px)]"
+  >
+    <!-- Print Wrapper containing strictly calculated pages -->
+    <div id="print-booklet-container" class="space-y-8 w-full max-w-[148mm] relative select-text">
+      <!-- ==================== BOOKLET PAGE 1: COVER PAGE ==================== -->
+      <article
+        [ngClass]="{
+          'border-4 border-stone-800/90': service.bookSettings.coverStyle === 'vintage',
+          'bg-white text-stone-900': true,
+        }"
+        class="print-page w-full aspect-[1/1.414] bg-white border border-stone-300 rounded-sm shadow-2xl p-10 md:p-14 flex flex-col justify-between relative box-border mx-auto select-none"
+      >
+        <!-- Page Frame for Vintage Style -->
+        <div
+          *ngIf="service.bookSettings.coverStyle === 'vintage'"
+          class="absolute inset-2 border-2 border-dashed border-stone-800/30 pointer-events-none"
+        ></div>
+
+        <!-- Emblem / Top decoration -->
+        <div class="text-center">
+          <div
+            *ngIf="service.bookSettings.coverStyle === 'vintage'"
+            class="text-xl text-stone-400 font-serif mb-2 font-light"
+          >
+            ❃ ❃ ❃
+          </div>
+          <div
+            *ngIf="service.bookSettings.coverStyle === 'classic'"
+            class="w-12 h-12 border border-stone-400 rounded-full mx-auto flex items-center justify-center mb-4 text-stone-500 font-serif"
+          >
+            ★
+          </div>
+        </div>
+
+        <!-- Title & Subtitle block -->
+        <div class="text-center my-auto space-y-4">
+          <h1
+            [ngClass]="{
+              'font-serif italic text-4xl md:text-5xl':
+                service.bookSettings.coverStyle === 'classic',
+              'font-sans uppercase tracking-widest text-4xl font-extrabold text-stone-950':
+                service.bookSettings.coverStyle === 'modern',
+              'font-serif text-4xl md:text-5xl font-black text-stone-900 border-b border-stone-300 pb-4':
+                service.bookSettings.coverStyle === 'vintage',
+            }"
+            class="leading-tight"
+          >
+            {{ service.bookSettings.title || 'MIO CANZONIERE' }}
+          </h1>
+
+          <p
+            [ngClass]="{
+              'font-serif text-sm italic text-stone-500':
+                service.bookSettings.coverStyle === 'classic',
+              'font-sans text-xs tracking-wider uppercase text-stone-600':
+                service.bookSettings.coverStyle === 'modern',
+              'font-serif text-base italic text-stone-600':
+                service.bookSettings.coverStyle === 'vintage',
+            }"
+          >
+            {{ service.bookSettings.subtitle || 'Canzoni e accordi' }}
+          </p>
+        </div>
+
+        <!-- Author & Date footer -->
+        <div class="text-center space-y-1">
+          <p
+            [ngClass]="{
+              'font-serif italic text-xs text-stone-400':
+                service.bookSettings.coverStyle === 'classic',
+              'font-sans uppercase text-[10px] tracking-widest font-semibold text-stone-700':
+                service.bookSettings.coverStyle === 'modern',
+              'font-serif text-xs text-stone-600': service.bookSettings.coverStyle === 'vintage',
+            }"
+          >
+            {{ service.bookSettings.author || 'Davide' }}
+          </p>
+          <p class="text-[10px] font-mono text-stone-400/80">Generato il 18 Luglio 2026</p>
+        </div>
+      </article>
+
+      <!-- ==================== MODE: ONE SONG PER PAGE ==================== -->
+      <ng-container *ngIf="service.bookSettings.layoutMode === 'one-per-page'">
+        <article
+          *ngFor="let song of service.songs; let idx = index"
+          class="print-page w-full aspect-[1/1.414] bg-white border border-stone-300 rounded-sm shadow-2xl p-10 md:p-14 flex flex-col justify-between box-border mx-auto relative"
+        >
+          <div class="space-y-5">
+            <!-- Song Header inside booklet -->
+            <div class="border-b border-stone-200 pb-2.5 flex justify-between items-baseline">
+              <div>
+                <h2 class="text-xl font-serif font-black text-stone-900 leading-tight">
+                  {{ idx + 1 }}. {{ song.title }}
+                </h2>
+                <p class="text-xs text-stone-400 italic">
+                  {{ song.artist }}
+                </p>
+              </div>
+              <span
+                class="text-[9px] uppercase tracking-wider font-semibold text-stone-400 bg-stone-100 px-2 py-0.5 rounded"
+              >
+                {{ song.category }}
+              </span>
+            </div>
+
+            <!-- Main lyrics with chords rendered for printing -->
+            <div
+              [ngClass]="{
+                'text-xs': service.bookSettings.fontSize === 'sm',
+                'text-sm': service.bookSettings.fontSize === 'md',
+                'text-base': service.bookSettings.fontSize === 'lg',
+                'columns-1': service.bookSettings.columns === '1',
+                'columns-2 gap-6': service.bookSettings.columns === '2',
+              }"
+              class="space-y-0.5 font-serif text-stone-800 leading-relaxed overflow-hidden"
+            >
+              <div
+                *ngFor="
+                  let line of service.getParsedLines(
+                    song.content,
+                    service.globalTranspose,
+                    service.globalNotation
+                  )
+                "
+                class="flex flex-wrap items-end break-inside-avoid"
+                [ngClass]="service.hasChords(line) ? 'pt-5 pb-0.5' : 'py-0.5'"
+              >
+                <div *ngFor="let segment of line" class="relative flex flex-col justify-end">
+                  <span
+                    *ngIf="segment.chord"
+                    class="absolute top-0 left-0 text-[10px] font-bold font-mono text-rose-800 tracking-wide select-none transform -translate-y-3.5"
+                  >
+                    {{ segment.chord }}
+                  </span>
+                  <span class="whitespace-pre font-medium text-stone-950">{{ segment.text }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Page Number -->
+          <div
+            class="border-t border-stone-100 pt-3 text-center text-stone-400 text-[10px] font-medium flex items-center justify-between"
+          >
+            <span class="font-serif italic text-[9px] text-stone-300"
+              >Canzoniere - {{ service.bookSettings.title }}</span
+            >
+            <span>{{ idx + 2 }}</span>
+          </div>
+        </article>
+      </ng-container>
+
+      <!-- ==================== MODE: CONTINUOUS SONGS FLOW (COMPACT) ==================== -->
+      <ng-container *ngIf="service.bookSettings.layoutMode === 'continuous'">
+        <article
+          class="print-page-continuous w-full bg-white border border-stone-300 rounded-sm shadow-2xl p-10 md:p-14 box-border mx-auto relative flex flex-col justify-between"
+        >
+          <div
+            [ngClass]="{
+              'columns-1': service.bookSettings.columns === '1',
+              'columns-2 gap-8': service.bookSettings.columns === '2',
+            }"
+            class="w-full text-stone-800"
+          >
+            <div
+              *ngFor="let song of service.songs; let idx = index"
+              class="break-inside-avoid mb-8 pb-6 border-b border-stone-100 last:border-0 last:mb-0 last:pb-0"
+            >
+              <!-- Compact Song Header -->
+              <div
+                class="border-b border-stone-200/80 pb-1.5 flex justify-between items-baseline mb-3"
+              >
+                <div>
+                  <h3 class="text-base font-serif font-black text-stone-950 leading-tight">
+                    {{ idx + 1 }}. {{ song.title }}
+                  </h3>
+                  <p class="text-[10px] text-stone-500 italic">
+                    {{ song.artist }}
+                  </p>
+                </div>
+                <span
+                  class="text-[8px] uppercase tracking-wider font-semibold text-stone-400 bg-stone-50 px-1.5 py-0.5 rounded"
+                >
+                  {{ song.category }}
+                </span>
+              </div>
+
+              <!-- Compact Lyrics with Chords -->
+              <div
+                [ngClass]="{
+                  'text-[10px]': service.bookSettings.fontSize === 'sm',
+                  'text-xs': service.bookSettings.fontSize === 'md',
+                  'text-sm': service.bookSettings.fontSize === 'lg',
+                }"
+                class="space-y-0.5 font-serif text-stone-800 leading-relaxed overflow-hidden"
+              >
+                <div
+                  *ngFor="
+                    let line of service.getParsedLines(
+                      song.content,
+                      service.globalTranspose,
+                      service.globalNotation
+                    )
+                  "
+                  class="flex flex-wrap items-end break-inside-avoid"
+                  [ngClass]="service.hasChords(line) ? 'pt-4 pb-0.5' : 'py-0.5'"
+                >
+                  <div *ngFor="let segment of line" class="relative flex flex-col justify-end">
+                    <span
+                      *ngIf="segment.chord"
+                      class="absolute top-0 left-0 text-[10px] font-bold font-mono text-rose-800 tracking-wide select-none transform -translate-y-3.5"
+                    >
+                      {{ segment.chord }}
+                    </span>
+                    <span class="whitespace-pre font-semibold text-stone-900">{{
+                      segment.text
+                    }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Page footer at bottom of flow -->
+          <div
+            class="border-t border-stone-100 pt-3 mt-8 text-center text-stone-400 text-[10px] font-medium flex items-center justify-between no-print"
+          >
+            <span class="font-serif italic text-[9px] text-stone-300"
+              >Canzoniere - {{ service.bookSettings.title }}</span
+            >
+            <span>Pagine Canzoni (Flusso Continuo)</span>
+          </div>
+        </article>
+      </ng-container>
+
+      <!-- ==================== BOOKLET PAGE N+2: TABLE OF CONTENTS (INDICE) ==================== -->
+      <article
+        class="print-page w-full aspect-[1/1.414] bg-white border border-stone-300 rounded-sm shadow-2xl p-10 md:p-14 flex flex-col justify-between box-border mx-auto relative"
+      >
+        <div class="space-y-6">
+          <!-- Header -->
+          <div class="border-b border-stone-300 pb-3">
+            <h2 class="text-2xl font-serif font-black text-stone-900 text-center">
+              {{ 'app.index_title' | transloco }}
+            </h2>
+          </div>
+
+          <!-- List with leader dots -->
+          <div class="space-y-3 font-serif">
+            <div
+              *ngFor="let song of service.songs; let i = index"
+              class="flex items-center justify-between text-sm md:text-base text-stone-800"
+            >
+              <div class="flex-1 flex items-baseline gap-2 truncate">
+                <span class="text-stone-400 text-xs font-mono">{{ i + 1 }}.</span>
+                <span class="font-bold text-stone-900 truncate">{{ song.title }}</span>
+                <span class="text-stone-400 text-xs italic truncate">({{ song.artist }})</span>
+                <!-- Dotted line fills the space -->
+                <span class="flex-1 border-b border-dotted border-stone-300 min-w-4 mx-2"></span>
+              </div>
+
+              <!-- Page Number / Sequential Indicator of the song -->
+              <div class="font-bold text-stone-900 font-mono text-right pl-2">
+                <ng-container *ngIf="service.bookSettings.layoutMode === 'one-per-page'">
+                  {{ i + 2 }}
+                </ng-container>
+                <ng-container *ngIf="service.bookSettings.layoutMode === 'continuous'">
+                  S. {{ i + 1 }}
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Page Number for Index -->
+        <div
+          class="border-t border-stone-100 pt-3 text-center text-stone-400 text-[10px] font-medium flex items-center justify-between"
+        >
+          <span class="font-serif italic text-[9px] text-stone-300"
+            >Canzoniere - {{ service.bookSettings.title }}</span
+          >
+          <span>
+            <ng-container *ngIf="service.bookSettings.layoutMode === 'one-per-page'">
+              {{ service.songs.length + 2 }}
+            </ng-container>
+            <ng-container *ngIf="service.bookSettings.layoutMode === 'continuous'">
+              Indice
+            </ng-container>
+          </span>
+        </div>
+      </article>
+    </div>
+  </section>
+</div>

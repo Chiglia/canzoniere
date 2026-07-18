@@ -1,0 +1,128 @@
+<div class="space-y-4 max-w-4xl w-full mx-auto flex-1 flex flex-col">
+  <div class="bg-white border border-stone-200/80 rounded-xl p-5 shadow-sm space-y-4 flex flex-col">
+    <!-- Meta fields -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div>
+        <label class="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-1.5">
+          {{ 'app.song_title' | transloco }} *
+        </label>
+        <input
+          type="text"
+          [(ngModel)]="service.editForm.title"
+          placeholder="La canzone del sole"
+          class="w-full px-3.5 py-2 border border-stone-200 rounded-lg text-sm text-stone-900 placeholder-stone-400 focus:outline-hidden focus:border-rose-500 transition-all bg-stone-50/20"
+        />
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-1.5">
+          {{ 'app.song_artist' | transloco }}
+        </label>
+        <input
+          type="text"
+          [(ngModel)]="service.editForm.artist"
+          placeholder="Lucio Battisti"
+          class="w-full px-3.5 py-2 border border-stone-200 rounded-lg text-sm text-stone-900 placeholder-stone-400 focus:outline-hidden focus:border-rose-500 transition-all bg-stone-50/20"
+        />
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-1.5">
+          {{ 'app.song_category' | transloco }}
+        </label>
+        <input
+          type="text"
+          [(ngModel)]="service.editForm.category"
+          placeholder="Pop Italiano"
+          class="w-full px-3.5 py-2 border border-stone-200 rounded-lg text-sm text-stone-900 placeholder-stone-400 focus:outline-hidden focus:border-rose-500 transition-all bg-stone-50/20"
+        />
+      </div>
+    </div>
+
+    <!-- Editor Transpose Panel -->
+    <div
+      class="flex items-center justify-between border-t border-b border-stone-100 py-2 flex-wrap gap-2"
+    >
+      <span
+        class="text-xs font-semibold text-stone-500 uppercase tracking-wider inline-flex items-center gap-1.5"
+      >
+        <i class="pi pi-sliders-h text-rose-700/80"></i>
+        {{ 'app.transpose' | transloco }} (Editor)
+      </span>
+      <div class="flex items-center gap-2">
+        <button
+          (click)="service.transposeText(-1)"
+          class="bg-stone-50 hover:bg-stone-100 text-stone-700 border border-stone-200 text-xs px-2.5 py-1.5 rounded-md font-medium transition-colors inline-flex items-center gap-1 cursor-pointer"
+        >
+          <i class="pi pi-minus text-[8px]"></i>
+          {{ 'app.transpose_down' | transloco }}
+        </button>
+        <button
+          (click)="service.transposeText(1)"
+          class="bg-stone-50 hover:bg-stone-100 text-stone-700 border border-stone-200 text-xs px-2.5 py-1.5 rounded-md font-medium transition-colors inline-flex items-center gap-1 cursor-pointer"
+        >
+          <i class="pi pi-plus text-[8px]"></i>
+          {{ 'app.transpose_up' | transloco }}
+        </button>
+      </div>
+    </div>
+
+    <!-- CHORDS QUICK INSERT HELPER -->
+    <div class="space-y-1.5">
+      <div class="flex items-center justify-between">
+        <label class="block text-xs font-bold text-stone-500 uppercase tracking-wider">
+          {{ 'app.chords_helper' | transloco }}
+        </label>
+        <span class="text-[10px] text-stone-400"> Click to insert chord at cursor </span>
+      </div>
+      <div
+        class="flex flex-wrap gap-1.5 p-2 bg-stone-50 border border-stone-200/80 rounded-lg max-h-24 overflow-y-auto"
+      >
+        <button
+          *ngFor="let chord of service.currentChordQuickList"
+          (click)="insertChord(chord)"
+          class="bg-white hover:bg-rose-50 hover:border-rose-300 text-stone-700 hover:text-rose-800 text-xs font-mono font-bold px-2 py-1 border border-stone-200 rounded-md transition-all shadow-3xs cursor-pointer"
+        >
+          {{ chord }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Lyrics Textarea -->
+    <div class="flex-1 flex flex-col space-y-1.5">
+      <div class="flex items-center justify-between flex-wrap gap-2">
+        <label class="block text-xs font-bold text-stone-500 uppercase tracking-wider">
+          {{ 'app.song_lyrics' | transloco }} *
+        </label>
+        <span class="text-[11px] text-stone-400 italic">
+          {{ 'app.lyrics_help' | transloco }}
+        </span>
+      </div>
+      <textarea
+        #lyricsTextarea
+        [(ngModel)]="service.editForm.content"
+        [placeholder]="'Esempio:\n[La]Le bionde trecce, gli [Mi]occhi azzurri e poi\n[Re]Le tue calze rosse...'"
+        rows="14"
+        class="flex-1 w-full p-4 border border-stone-200 rounded-xl text-sm text-stone-900 font-mono placeholder-stone-400 bg-stone-50/10 focus:outline-hidden focus:border-rose-500 leading-relaxed resize-y min-h-[250px]"
+      ></textarea>
+    </div>
+
+    <!-- Submission Actions -->
+    <div class="flex items-center justify-end gap-3 pt-2">
+      <button
+        *ngIf="!service.isNewSong"
+        (click)="service.selectSong(service.editForm.id); service.activeTab = 'preview'"
+        class="bg-stone-50 hover:bg-stone-100 text-stone-700 border border-stone-200 px-4 py-2 rounded-lg text-sm font-semibold transition-colors cursor-pointer"
+      >
+        {{ 'app.cancel_edit' | transloco }}
+      </button>
+      <button
+        (click)="save()"
+        class="bg-rose-700 hover:bg-rose-800 text-white font-semibold py-2 px-5 rounded-lg text-sm shadow-md shadow-rose-900/10 transition-colors cursor-pointer inline-flex items-center gap-1.5"
+      >
+        <i class="pi pi-save"></i>
+        {{ (service.isNewSong ? 'app.save_song' : 'app.update_song') | transloco }}
+      </button>
+    </div>
+  </div>
+</div>

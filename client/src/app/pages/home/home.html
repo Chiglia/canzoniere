@@ -1,1 +1,146 @@
-<p>home works!</p>
+<div
+  class="min-h-screen flex flex-col bg-stone-100/60 text-stone-800 font-sans"
+  id="app-root-container"
+>
+  <!-- Navigation Header (Hidden on print) -->
+  <header
+    class="no-print bg-white border-b border-stone-200/80 px-6 py-4 flex flex-wrap items-center justify-between shadow-xs sticky top-0 z-50"
+  >
+    <div class="flex items-center gap-3">
+      <div
+        class="w-10 h-10 rounded-lg bg-rose-700 flex items-center justify-center shadow-md shadow-rose-900/10 text-white"
+      >
+        <i class="pi pi-book text-xl"></i>
+      </div>
+      <div>
+        <h1 class="text-xl font-bold font-serif tracking-tight text-stone-900">
+          {{ 'app.title' | transloco }}
+        </h1>
+        <p class="text-xs text-stone-500 font-medium">
+          {{ 'app.subtitle' | transloco }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Toolbar controls -->
+    <div class="flex items-center gap-3 mt-3 sm:mt-0">
+      <!-- Language Selector -->
+      <div class="flex bg-stone-100 rounded-lg p-0.5 border border-stone-200/60">
+        <button
+          (click)="langService.setLanguage('it')"
+          [class.bg-white]="langService.currentLang === 'it'"
+          [class.shadow-xs]="langService.currentLang === 'it'"
+          [class.text-stone-900]="langService.currentLang === 'it'"
+          [class.font-semibold]="langService.currentLang === 'it'"
+          class="px-2.5 py-1 text-xs rounded-md text-stone-500 transition-all cursor-pointer"
+        >
+          IT
+        </button>
+        <button
+          (click)="langService.setLanguage('en')"
+          [class.bg-white]="langService.currentLang === 'en'"
+          [class.shadow-xs]="langService.currentLang === 'en'"
+          [class.text-stone-900]="langService.currentLang === 'en'"
+          [class.font-semibold]="langService.currentLang === 'en'"
+          class="px-2.5 py-1 text-xs rounded-md text-stone-500 transition-all cursor-pointer"
+        >
+          EN
+        </button>
+      </div>
+
+      <!-- Mode Toggle / Actions -->
+      <button
+        *ngIf="service.viewMode === 'editor'"
+        (click)="service.generateBooklet()"
+        class="bg-stone-900 hover:bg-stone-800 text-white text-sm px-4 py-2 rounded-lg font-medium inline-flex items-center gap-2 transition-colors cursor-pointer shadow-sm"
+      >
+        <i class="pi pi-print"></i>
+        {{ 'app.generate_book' | transloco }}
+      </button>
+
+      <button
+        *ngIf="service.viewMode === 'booklet'"
+        (click)="service.viewMode = 'editor'"
+        class="bg-stone-100 hover:bg-stone-200 text-stone-800 border border-stone-300 text-sm px-4 py-2 rounded-lg font-medium inline-flex items-center gap-2 transition-colors cursor-pointer"
+      >
+        <i class="pi pi-arrow-left"></i>
+        {{ 'app.back_to_editor' | transloco }}
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN WORKSPACE -->
+  <main class="flex-1 flex overflow-hidden">
+    <!-- ==================== VIEW MODE: EDITOR (DASHBOARD) ==================== -->
+    <div
+      *ngIf="service.viewMode === 'editor'"
+      class="w-full flex flex-col md:flex-row flex-1 overflow-hidden"
+    >
+      <!-- LEFT SIDEBAR: SONGBOOK LIST -->
+      <app-song-sidebar class="no-print flex flex-col h-full"></app-song-sidebar>
+
+      <!-- RIGHT PANEL: CREATOR WORKSPACE -->
+      <section class="flex-1 bg-stone-50/40 p-4 lg:p-6 overflow-y-auto flex flex-col">
+        <!-- Tabs & Global Song Controls -->
+        <div
+          class="flex items-center justify-between border-b border-stone-200 pb-3 mb-4 flex-wrap gap-3"
+        >
+          <div class="flex bg-stone-200/80 rounded-xl p-1 gap-1">
+            <button
+              (click)="service.activeTab = 'edit'"
+              [class.bg-white]="service.activeTab === 'edit'"
+              [class.text-stone-900]="service.activeTab === 'edit'"
+              [class.font-semibold]="service.activeTab === 'edit'"
+              [class.shadow-xs]="service.activeTab === 'edit'"
+              class="px-4 py-1.5 rounded-lg text-xs font-medium text-stone-600 cursor-pointer transition-all"
+            >
+              {{ 'app.tab_edit' | transloco }}
+            </button>
+            <button
+              (click)="service.activeTab = 'preview'"
+              [class.bg-white]="service.activeTab === 'preview'"
+              [class.text-stone-900]="service.activeTab === 'preview'"
+              [class.font-semibold]="service.activeTab === 'preview'"
+              [class.shadow-xs]="service.activeTab === 'preview'"
+              class="px-4 py-1.5 rounded-lg text-xs font-medium text-stone-600 cursor-pointer transition-all"
+            >
+              {{ 'app.tab_preview' | transloco }}
+            </button>
+          </div>
+
+          <!-- Chord Notation Switcher (Global display / Editor Notation) -->
+          <div class="flex items-center gap-2">
+            <span class="text-xs text-stone-500 font-medium">
+              {{ 'app.notation_label' | transloco }}:
+            </span>
+            <button
+              (click)="service.toggleNotation()"
+              class="bg-white border border-stone-200 hover:border-stone-400 text-stone-700 text-xs px-3 py-1.5 rounded-lg font-semibold inline-flex items-center gap-1 transition-all shadow-2xs cursor-pointer"
+            >
+              <i class="pi pi-sync text-[10px] text-stone-400"></i>
+              {{
+                service.notation === 'it'
+                  ? ('app.notation_it' | transloco)
+                  : ('app.notation_en' | transloco)
+              }}
+            </button>
+          </div>
+        </div>
+
+        <!-- ==================== TAB: EDIT SONG ==================== -->
+        <app-song-editor
+          *ngIf="service.activeTab === 'edit'"
+          class="flex-1 flex flex-col"
+        ></app-song-editor>
+
+        <!-- ==================== TAB: PREVIEW SONG ==================== -->
+        <app-song-preview *ngIf="service.activeTab === 'preview'" class="w-full"></app-song-preview>
+      </section>
+    </div>
+
+    <!-- ==================== VIEW MODE: BOOKLET (PRINT PREVIEW) ==================== -->
+    <div *ngIf="service.viewMode === 'booklet'" class="w-full flex-1 overflow-hidden h-full">
+      <app-booklet-preview class="h-full"></app-booklet-preview>
+    </div>
+  </main>
+</div>
