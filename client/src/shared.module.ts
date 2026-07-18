@@ -6,11 +6,18 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CardModule } from 'primeng/card';
 
 @NgModule({
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterLink, RouterModule, ButtonModule],
-  exports: [
+  imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    RouterLink,
+    RouterModule,
+    ButtonModule,
+    CardModule,
+  ],
+  exports: [
+    CommonModule,
+    FormsModule,
     ReactiveFormsModule,
     RouterLink,
     RouterModule,
@@ -18,4 +25,4 @@ import { CardModule } from 'primeng/card';
     CardModule,
   ],
 })
-export class SharedModule {}
+export class SharedModule { }

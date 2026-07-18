@@ -1,26 +1,42 @@
-import {
-  ApplicationConfig,
-  provideBrowserGlobalErrorListeners,
-  provideZonelessChangeDetection,
-} from '@angular/core';
+import { ApplicationConfig, provideBrowserGlobalErrorListeners, isDevMode } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { providePrimeNG } from 'primeng/config';
-import Aura from '@primeuix/themes/aura';
-import { provideAnimations } from '@angular/platform-browser/animations';
 
 import { routes } from './app.routes';
+
+import { providePrimeNG } from 'primeng/config';
+import Aura from '@primeuix/themes/aura';
+import { definePreset, palette } from '@primeuix/themes';
+import { provideHttpClient } from '@angular/common/http';
+import { TranslocoHttpLoader } from './transloco-loader';
+import { provideTransloco } from '@jsverse/transloco';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideZonelessChangeDetection(),
     provideRouter(routes),
-    provideAnimations(),
+    provideHttpClient(),
+    provideTransloco({
+      config: {
+        availableLangs: ['it', 'en'],
+        defaultLang: 'it',
+        reRenderOnLangChange: true,
+        prodMode: !isDevMode(),
+      },
+      loader: TranslocoHttpLoader
+    }),
     providePrimeNG({
       theme: {
-        preset: Aura,
+        preset: definePreset(Aura, {
+          semantic: {
+            primary: palette('{blue}'),
+          },
+        }),
         options: {
           darkModeSelector: '.my-app-dark',
+          cssLayer: {
+            name: 'primeng',
+            order: 'theme, base, primeng '
+          },
         },
       },
     }),
